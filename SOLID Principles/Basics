@@ -9,3 +9,5 @@ Q. what is solid principles?
   5. Dependency Inversion Principle: High-level modules should not depend on low-level modules. Abstractions should not depend on details. Details should depend on abstractions.
 
   These principles are intended to help developers create more maintainable and scalable software systems by promoting good design practices. They are particularly relevant for object-oriented programming, but can also be applied to other programming paradigms.
+
+****************************************************************************************************************

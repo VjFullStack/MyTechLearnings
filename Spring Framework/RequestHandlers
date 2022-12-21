@@ -1,0 +1,146 @@
+Q. When some request comes to Controller, Does it go through all the three handler adapter above?
+
+No, when a request comes to a controller in the Spring MVC framework, it does not go through all of the
+handler adapters mentioned above. Instead, the DispatcherServlet uses the registered handler mappings to
+determine which handler is responsible for handling the request, and then uses the appropriate handler
+adapter to invoke the handler.
+
+For example, consider the following controller:
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+public class MyController {
+
+  @RequestMapping("/hello")
+  @ResponseBody
+  public String handleRequest() {
+    return "Hello, World!";
+  }
+}
+
+In this example, the MyController class is annotated with the @Controller annotation, which indicates
+that it is a controller in the Spring MVC framework. The handleRequest method is annotated with the
+@RequestMapping annotation, which maps it to the /hello URL.
+
+When an HTTP request is made to the /hello URL, the DispatcherServlet will use the registered handler
+mappings to determine which handler is responsible for handling the request. If the
+RequestMappingHandlerMapping is registered as a handler mapping, it will use the @RequestMapping
+annotations to map the request to the handleRequest method of the MyController class.
+
+Next, the DispatcherServlet will use the registered handler adapters to determine how to invoke the
+handler. If the AnnotationMethodHandlerAdapter is registered as a handler adapter, it will use the
+@RequestMapping annotations to determine how to invoke the handleRequest method.
+
+In this way, the DispatcherServlet uses the Observer design pattern to route incoming requests to the
+appropriate handler and invoke the handler to handle the request. Only the handler mappings and handler
+adapters that are registered with the DispatcherServlet will be used to handle the request.
+
+****************************************************************************************************************
+
+Q. How Dispatcher servlet uses registered handler mapping to determine
+which handler is responsible for handling the request?
+
+In the Spring MVC framework, the DispatcherServlet uses the registered handler mappings to
+determine which handler is responsible for handling an incoming request. The DispatcherServlet iterates
+through the registered handler mappings and calls the getHandler method on each one, passing in the
+incoming request. The first handler mapping that returns a non-null value is used to handle the request.
+
+For example, consider the following handler mapping:
+
+import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+
+public class MyHandlerMapping implements HandlerMapping {
+
+  private RequestMappingHandlerMapping delegate;
+
+  public MyHandlerMapping(RequestMappingHandlerMapping delegate) {
+    this.delegate = delegate;
+  }
+
+  @Override
+  public ModelAndView getHandler(HttpServletRequest request) throws Exception {
+    // Delegate to the RequestMappingHandlerMapping to get the handler
+    Object handler = delegate.getHandler(request);
+    if (handler != null) {
+      return new ModelAndView(handler);
+    }
+    return null;
+  }
+}
+
+In this example, the MyHandlerMapping class is an implementation of the HandlerMapping interface
+that delegates to the RequestMappingHandlerMapping to get the handler for the incoming request.
+When the DispatcherServlet calls the getHandler method on the MyHandlerMapping, it will pass the
+request to the RequestMappingHandlerMapping, which will use the @RequestMapping annotations to map
+the request to the appropriate handler. If the RequestMappingHandlerMapping returns a non-null value,
+the MyHandlerMapping will return a ModelAndView object with the handler as its view.
+
+To use the MyHandlerMapping in a Spring MVC application, you can register it as a bean in the
+ApplicationContext:
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+
+@Configuration
+public class MyConfiguration extends WebMvcConfigurationSupport {
+
+  @Bean
+  public MyHandlerMapping myHandlerMapping(RequestMappingHandlerMapping delegate) {
+    return new MyHandlerMapping(delegate);
+  }
+}
+
+This will register the MyHandlerMapping as a bean in the ApplicationContext, and the DispatcherServlet will use it to determine which
+handler to use for incoming requests.
+
+****************************************************************************************************************
+
+Q. So RequestMappingHandlerMapping gives us which adapter to use?
+
+No, the RequestMappingHandlerMapping does not give us which handler adapter to use. Instead,
+it gives us the handler object that is responsible for handling the request. The handler adapter is
+then used to invoke the handler and handle the request.
+
+The RequestMappingHandlerMapping is an implementation of the HandlerMapping interface that maps incoming
+requests to handler objects based on the @RequestMapping annotations on the handler methods. It does not
+have any knowledge of the handler adapters that are registered with the DispatcherServlet.
+
+Here is an example of how the RequestMappingHandlerMapping works:
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+public class MyController {
+
+  @RequestMapping("/hello")
+  @ResponseBody
+  public String handleRequest() {
+    return "Hello, World!";
+  }
+}
+
+In this example, the MyController class is annotated with the @Controller annotation, which indicates
+that it is a controller in the Spring MVC framework. The handleRequest method is annotated with the
+@RequestMapping annotation, which maps it to the /hello URL.
+
+When an HTTP request is made to the /hello URL, the RequestMappingHandlerMapping will use the
+@RequestMapping annotations to map the request to the handleRequest method of the MyController class.
+It will then return the handleRequest method as the handler for the request.
+
+The DispatcherServlet will then use the registered handler adapters to determine how to invoke the
+handler and handle the request. If the AnnotationMethodHandlerAdapter is registered as a handler adapter,
+it will use the @RequestMapping annotations to determine how to invoke the handleRequest method.
+
+In this way, the RequestMappingHandlerMapping maps incoming requests to handler objects, and the
+handler adapters are used to invoke the handlers and handle the requests.
+
+****************************************************************************************************************
+
