@@ -1,3 +1,131 @@
+Q. What is happening behind when Json request comes to Controller method in Springboot
+
+When a JSON request is sent to a Spring Boot controller method, the following steps occur:
+
+1. The request is received by the controller method and is mapped to the appropriate handler method based
+on the request path and HTTP method (e.g., GET, POST, PUT, DELETE).
+
+2. The request payload (i.e., the JSON data) is automatically deserialized by the framework into a Java
+object, using a suitable ObjectMapper. This object is then passed as an argument to the controller method.
+
+3. The controller method processes the request and performs any necessary business logic.
+
+4. The controller method returns a response, which can be a Java object. The framework will automatically
+serialize this object into JSON and send it back to the client as the response payload.
+
+The client receives the response and can process the data as needed.
+
+It's important to note that the steps described above are a simplified version of what happens when a JSON request is handled by a Spring Boot controller. There are many additional details and configurations that can be applied to customize the way the request is processed and the response is generated.
+****************************************************************************************************************
+Q. How do we configure ObjectMapper using applciation.yml file?
+
+To configure the ObjectMapper using the application.yml file in a Spring Boot application, you can use the following syntax:
+
+spring:
+  jackson:
+    serialization:
+      indent-output: true
+    property-naming-strategy: SNAKE_CASE
+
+
+This configuration will instruct the ObjectMapper to use a property naming strategy of "SNAKE_CASE" and
+to indent the output when serializing Java objects to JSON.
+
+You can also specify other options for the ObjectMapper, such as the date format, timezone, and whether
+to include null values in the serialized output. For example:
+
+spring:
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+      date-format: yyyy-MM-dd HH:mm:ss
+      time-zone: UTC
+      write-null-map-values: true
+
+This configuration will instruct the ObjectMapper to write dates as strings using the specified date
+format, to use the UTC timezone when serializing dates, and to include null values in the serialized
+output.
+
+It's important to note that these are just a few examples of the options that can be configured for the
+ObjectMapper. There are many other options available, and you can find more information about them in
+the Jackson documentation.
+
+****************************************************************************************************************
+Q. Is it really required or optional?
+
+Configuring the ObjectMapper in a Spring Boot application is optional. If you do not specify any
+configuration for the ObjectMapper, the framework will use the default settings provided by the Jackson
+library.
+
+The default settings for the ObjectMapper are usually sufficient for most applications, and you may not
+need to configure the ObjectMapper at all. However, if you need to customize the way the ObjectMapper
+serializes and deserializes JSON data, you can do so by specifying the appropriate configuration in the
+application.yml file or programmatically using the @EnableConfigurationProperties annotation.
+
+For example, you might want to customize the way dates are formatted in the JSON output, or you might
+want to use a different property naming strategy for the Java object fields. In these cases, you can use
+the configuration options provided by the Jackson library to customize the ObjectMapper to suit your
+needs.
+****************************************************************************************************************
+Q. In my application, there is boolean field in my Java class. Client is sending 1 or 0. it is throwing
+bad request because it is expecting either true or false. Can customize in serialiazer?
+
+Yes, you can customize the way the ObjectMapper handles boolean values in the JSON payload when
+deserializing data into a Java object.
+
+One way to do this is to use a custom JsonDeserializer. A JsonDeserializer is a class that implements the
+com.fasterxml.jackson.databind.JsonDeserializer interface and defines how to deserialize a specific
+type of data.
+
+To use a custom JsonDeserializer for boolean values, you can create a class like this:
+
+public class BooleanSerializer extends JsonSerializer<Boolean> {
+
+    @Override
+    public void serialize(Boolean value, JsonGenerator gen, SerializerProvider serializers)
+            throws IOException {
+        gen.writeNumber(value ? 1 : 0);
+    }
+}
+
+public class BooleanDeserializer extends JsonDeserializer<Boolean> {
+
+    @Override
+    public Boolean deserialize(JsonParser parser, DeserializationContext context)
+            throws IOException {
+        int value = parser.getIntValue();
+        return value == 1;
+    }
+}
+
+These serializer and deserializer will serialize and deserialize boolean values using the integer values
+1 and 0, respectively.
+
+To use these serializer and deserializer globally, you can register them with the ObjectMapper by
+creating a configuration class and annotating it with the @Configuration and
+@EnableConfigurationProperties annotations. For example:
+
+@Configuration
+@EnableConfigurationProperties
+public class CustomObjectMapperConfiguration {
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(Boolean.class, new BooleanSerializer());
+        module.addDeserializer(Boolean.class, new BooleanDeserializer());
+        mapper.registerModule(module);
+        return mapper;
+    }
+}
+
+This configuration will create a new ObjectMapper with the custom serializer and deserializer registered,
+and it will be used by the framework to serialize and deserialize JSON data.
+
+It's important to note that this is just one way to customize the way the ObjectMapper handles boolean
+values globally.
+****************************************************************************************************************
 Q. When some request comes to Controller, Does it go through all the three handler adapter above?
 
 No, when a request comes to a controller in the Spring MVC framework, it does not go through all of the
