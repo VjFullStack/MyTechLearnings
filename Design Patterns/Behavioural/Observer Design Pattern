@@ -13,7 +13,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 // The subject class extends the Observable class
-class Subject extends Observable {
+```class Subject extends Observable {
   private int state;
 
   public int getState() {
@@ -28,9 +28,10 @@ class Subject extends Observable {
     notifyObservers();
   }
 }
+```
 
 // The observer class implements the Observer interface
-class Observer implements java.util.Observer {
+```class Observer implements java.util.Observer {
   private Subject subject;
 
   public Observer(Subject subject) {
@@ -54,7 +55,7 @@ public class Main {
     subject.setState(2);
   }
 }
-
+```
 
 In this example, the Subject class represents the object being observed, and the Observer
 class represents the object observing the subject. The Observer class registers itself as an observer
@@ -70,7 +71,7 @@ subject and the View represents the observer.
 
 ****************************************************************************************************************
 
-Q. How Spring uses Observer design pattern?
+# Q. How Spring uses Observer design pattern?
 
 In the Spring framework, the Observer design pattern is used in various places to allow objects to be
 notified of changes in the state of other objects.
@@ -83,7 +84,7 @@ with the ApplicationContext using the addApplicationListener method.
 
 Here is an example of how to register an ApplicationListener in a Spring application:
 
-import org.springframework.context.ApplicationListener;
+``` import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 
 public class MyApplicationListener implements ApplicationListener<ContextRefreshedEvent> {
@@ -94,10 +95,11 @@ public class MyApplicationListener implements ApplicationListener<ContextRefresh
     System.out.println("ApplicationContext refreshed!");
   }
 }
+```
 
 To register the ApplicationListener, you can add it to the list of listeners in the ApplicationContext:
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+``` import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Main {
   public static void main(String[] args) {
@@ -106,6 +108,7 @@ public class Main {
     context.refresh();
   }
 }
+```
 
 
 In this example, the MyApplicationListener class is registered as an ApplicationListener with the
@@ -131,11 +134,11 @@ handle the request.
 There are several implementations of the HandlerMapping interface in the Spring framework, including the
 following:
 
-* RequestMappingHandlerMapping: Maps incoming requests to methods annotated with the @RequestMapping
++ RequestMappingHandlerMapping: Maps incoming requests to methods annotated with the @RequestMapping
 annotation
-* BeanNameUrlHandlerMapping: Maps incoming requests to beans in the ApplicationContext based on their
++ BeanNameUrlHandlerMapping: Maps incoming requests to beans in the ApplicationContext based on their
 bean names
-* SimpleUrlHandlerMapping: Maps incoming requests to handler objects based on a predefined mapping of
++ SimpleUrlHandlerMapping: Maps incoming requests to handler objects based on a predefined mapping of
 URL patterns to handler objects
 
 The DispatcherServlet also uses the HandlerAdapter interface to invoke the handler for the incoming
@@ -144,12 +147,11 @@ object that can handle the request, and returns an object that represents the re
 The DispatcherServlet then uses this object to generate the HTTP response.
 
 There are several implementations of the HandlerAdapter interface in the Spring framework, including the following:
-
-* HttpRequestHandlerAdapter: Adapts objects that implement the HttpRequestHandler interface to the
++ HttpRequestHandlerAdapter: Adapts objects that implement the HttpRequestHandler interface to the
 HandlerAdapter interface
-* SimpleControllerHandlerAdapter: Adapts objects that implement the Controller interface to the
++ SimpleControllerHandlerAdapter: Adapts objects that implement the Controller interface to the
 HandlerAdapter interface
-* AnnotationMethodHandlerAdapter: Adapts objects that have methods annotated with the @RequestMapping
++ AnnotationMethodHandlerAdapter: Adapts objects that have methods annotated with the @RequestMapping
 annotation to the HandlerAdapter interface
 
 In this way, the DispatcherServlet uses the Observer design pattern to handle incoming HTTP requests.
