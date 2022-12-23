@@ -63,7 +63,7 @@ time.
 
 ****************************************************************************************************************
 
-Q. How it is different from Spring depedancy injection
+# Q. How it is different from Spring depedancy injection
 
 Spring is a Java framework that provides a range of features and tools for developing Java applications,
 including support for dependency injection.
@@ -80,7 +80,7 @@ methods on the class after the object is created.
 
 Here is an example of how dependency injection can be used with Spring:
 
-public class Car {
+``` public class Car {
   private Engine engine;
 
   @Autowired
@@ -102,7 +102,7 @@ public class ElectricEngine implements Engine {
     // start the electric engine
   }
 }
-
+```
 In this example, the Car class is annotated with the @Autowired annotation, which tells Spring to
 inject an Engine object into the Car class when it is created. The V8Engine and ElectricEngine classes
 are annotated with the @Service annotation, which tells Spring that they are available to be injected

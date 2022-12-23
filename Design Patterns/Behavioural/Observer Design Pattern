@@ -1,4 +1,4 @@
-Q. What is Observer design pattern? Explain in detail in Java
+# Q. What is Observer design pattern? Explain in detail in Java
 
 The Observer design pattern is a behavioral design pattern that allows an object (known as the subject)
 to notify a set of objects (known as observers) when its state changes. The subject and the observers are
