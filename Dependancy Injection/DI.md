@@ -43,15 +43,18 @@ public class ElectricEngine implements Engine {
   public void start() {
     // start the electric engine
   }
-}```
+}
+```
 
 // Example usage
 ```Car car = new Car(new V8Engine());
-car.start();```
+car.start();
+```
 
 // We can easily replace the engine by using setEngine()
 ```car.setEngine(new ElectricEngine());
-car.start();```
+car.start();
+```
 
 
 By using dependency injection, we can easily replace or modify the Engine object used by the Car class
