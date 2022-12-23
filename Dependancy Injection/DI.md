@@ -1,4 +1,4 @@
-#Q. Can you explain , How does Composed objects can be easily replaced or modified without affecting
+# Q. Can you explain , How does Composed objects can be easily replaced or modified without affecting
 the class that uses them with java
 
 In object-oriented programming, one way to easily replace or modify composed objects without affecting
