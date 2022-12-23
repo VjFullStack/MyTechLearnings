@@ -1,11 +1,11 @@
-Q. Explain Factory Design pattern in java
+# Q. Explain Factory Design pattern in java
 
 The Factory design pattern is a creational design pattern that provides an interface for creating
 objects in a super class, but allows subclasses to alter the type of objects that will be created.
 
 Here's an example of how the Factory design pattern could be implemented in Java:
 
-public interface Animal {
+```public interface Animal {
    void speak();
 }
 
@@ -32,14 +32,15 @@ public class AnimalFactory {
       return null;
    }
 }
-
+```
 // usage
+```
 Animal dog = AnimalFactory.getAnimal("dog");
 dog.speak(); // prints "Woof!"
 
 Animal cat = AnimalFactory.getAnimal("cat");
 cat.speak(); // prints "Meow!"
-
+```
 
 In this example, the Animal interface defines a single method for making a sound. The Dog and Cat
 classes are concrete implementations of the Animal interface, each with its own implementation of the
@@ -56,7 +57,7 @@ separating the creation of objects from their usage.
 
 ****************************************************************************************************************
 
-Q. Which of the SOLID principles are followed by above Factory design pattern
+# Q. Which of the SOLID principles are followed by above Factory design pattern
 
 The SOLID principles are a set of design guidelines that aim to make software more maintainable
 and scalable. The Factory design pattern follows the "Dependency Inversion Principle",

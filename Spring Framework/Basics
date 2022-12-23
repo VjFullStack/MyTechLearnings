@@ -1,4 +1,4 @@
-Q. what if we create some object using new keyword in spring. and some using Depedancy Injection?
+# Q. what if we create some object using new keyword in spring. and some using Depedancy Injection?
 
 If you create an object using the new keyword in a Spring application, it will not be managed by the
 Spring container and will not be eligible for dependency injection. This means that the dependencies of
@@ -18,20 +18,20 @@ dependency injection.
 
 ****************************************************************************************************************
 
-Q. what kind of objects are not eligible for dependancy injection
+# Q. what kind of objects are not eligible for dependancy injection
 
 There are a few types of objects that are not eligible for dependency injection in the Spring framework:
 
-1. Objects that are not managed by the Spring container: Only objects that are created and managed by
+- Objects that are not managed by the Spring container: Only objects that are created and managed by
 the Spring container can be eligible for dependency injection. Objects created using the new
 keyword or created by another framework are not managed by the Spring container and are not eligible
 for dependency injection.
 
-2. Objects with complex construction: Some objects may have complex constructors or may require
+- Objects with complex construction: Some objects may have complex constructors or may require
 special initialization logic that cannot be easily expressed in a Spring configuration file.
 In these cases, it may not be practical to use dependency injection to create the object.
 
-3. Objects with circular dependencies: If two objects have a circular dependency, where one
+- Objects with circular dependencies: If two objects have a circular dependency, where one
 object depends on the other and vice versa, it can be difficult to use dependency injection to
 create them. This is because one object cannot be created until the other object is created, and
 vice versa, which creates a chicken-and-egg problem.
@@ -43,10 +43,10 @@ appropriate.
 
 ****************************************************************************************************************
 
-Q. can you explain point no 3 from previous ans with code
+# Q. can you explain point no 3 from previous ans with code
 
 Sure, here is an example of two classes that have a circular dependency:
-
+```
 class ClassA {
   private ClassB classB;
 
@@ -62,7 +62,7 @@ class ClassB {
     this.classA = classA;
   }
 }
-
+```
 In this example, ClassA depends on ClassB, and ClassB depends on ClassA. This creates a circular
 dependency, as ClassA cannot be created until ClassB is created, and ClassB cannot be created until
 ClassA is created.
@@ -70,7 +70,7 @@ ClassA is created.
 To use dependency injection to create these classes in a Spring application, you would need to use a
 special type of dependency injection called circular dependency injection, which involves using
 a third party object to break the circular dependency. Here is an example of how this could be done:
-
+```
 @Configuration
 class AppConfig {
   @Bean
@@ -83,7 +83,7 @@ class AppConfig {
     return new ClassB(classA());
   }
 }
-
+```
 In this example, the classA and classB beans are created using circular dependency injection,
 where the classA bean depends on the classB bean, and the classB bean depends on the classA bean.
 The Spring container will manage these beans and ensure that they are properly initialized.
@@ -95,7 +95,7 @@ dependency.
 
 ****************************************************************************************************************
 
-Q. how appconfig class in above example will work?
+# Q. how appconfig class in above example will work?
 
 The AppConfig class in the above example is a configuration class that is used to define beans for
 a Spring application. The AppConfig class is annotated with the @Configuration annotation,
@@ -121,7 +121,7 @@ dependency injection to manage a circular dependency between the classA and clas
 
 ****************************************************************************************************************
 
-Q. Does Spring use Separate heap space to create spring context.
+# Q. Does Spring use Separate heap space to create spring context.
 
 No, the Spring framework does not use a separate heap space to create the Spring context.
 The Spring context is created within the same heap space as the rest of the application.
@@ -141,7 +141,7 @@ and it is responsible for managing the beans and their dependencies in the appli
 
 ****************************************************************************************************************
 
-Q. If we create objects using new in Spring application. Will it affect performance.
+# Q. If we create objects using new in Spring application. Will it affect performance.
 
 Creating objects using the new keyword in a Spring application will not necessarily affect the
 performance of the application. However, it can make the application more difficult to manage and

@@ -1,16 +1,16 @@
-Q. What is happening behind when Json request comes to Controller method in Springboot
+# Q. What is happening behind when Json request comes to Controller method in Springboot
 
 When a JSON request is sent to a Spring Boot controller method, the following steps occur:
 
-1. The request is received by the controller method and is mapped to the appropriate handler method based
++ The request is received by the controller method and is mapped to the appropriate handler method based
 on the request path and HTTP method (e.g., GET, POST, PUT, DELETE).
 
-2. The request payload (i.e., the JSON data) is automatically deserialized by the framework into a Java
++ The request payload (i.e., the JSON data) is automatically deserialized by the framework into a Java
 object, using a suitable ObjectMapper. This object is then passed as an argument to the controller method.
 
-3. The controller method processes the request and performs any necessary business logic.
++ The controller method processes the request and performs any necessary business logic.
 
-4. The controller method returns a response, which can be a Java object. The framework will automatically
++ The controller method returns a response, which can be a Java object. The framework will automatically
 serialize this object into JSON and send it back to the client as the response payload.
 
 The client receives the response and can process the data as needed.
@@ -20,20 +20,20 @@ It's important to note that the steps described above are a simplified version o
 Q. How do we configure ObjectMapper using applciation.yml file?
 
 To configure the ObjectMapper using the application.yml file in a Spring Boot application, you can use the following syntax:
-
+```
 spring:
   jackson:
     serialization:
       indent-output: true
     property-naming-strategy: SNAKE_CASE
 
-
+```
 This configuration will instruct the ObjectMapper to use a property naming strategy of "SNAKE_CASE" and
 to indent the output when serializing Java objects to JSON.
 
 You can also specify other options for the ObjectMapper, such as the date format, timezone, and whether
 to include null values in the serialized output. For example:
-
+```
 spring:
   jackson:
     serialization:
@@ -41,7 +41,7 @@ spring:
       date-format: yyyy-MM-dd HH:mm:ss
       time-zone: UTC
       write-null-map-values: true
-
+```
 This configuration will instruct the ObjectMapper to write dates as strings using the specified date
 format, to use the UTC timezone when serializing dates, and to include null values in the serialized
 output.
@@ -51,7 +51,7 @@ ObjectMapper. There are many other options available, and you can find more info
 the Jackson documentation.
 
 ****************************************************************************************************************
-Q. Is it really required or optional?
+# Q. Is it really required or optional?
 
 Configuring the ObjectMapper in a Spring Boot application is optional. If you do not specify any
 configuration for the ObjectMapper, the framework will use the default settings provided by the Jackson
@@ -67,7 +67,7 @@ want to use a different property naming strategy for the Java object fields. In 
 the configuration options provided by the Jackson library to customize the ObjectMapper to suit your
 needs.
 ****************************************************************************************************************
-Q. In my application, there is boolean field in my Java class. Client is sending 1 or 0. it is throwing
+# Q. In my application, there is boolean field in my Java class. Client is sending 1 or 0. it is throwing
 bad request because it is expecting either true or false. Can customize in serialiazer?
 
 Yes, you can customize the way the ObjectMapper handles boolean values in the JSON payload when
@@ -78,7 +78,7 @@ com.fasterxml.jackson.databind.JsonDeserializer interface and defines how to des
 type of data.
 
 To use a custom JsonDeserializer for boolean values, you can create a class like this:
-
+```
 public class BooleanSerializer extends JsonSerializer<Boolean> {
 
     @Override
@@ -87,7 +87,10 @@ public class BooleanSerializer extends JsonSerializer<Boolean> {
         gen.writeNumber(value ? 1 : 0);
     }
 }
+```
+-----------------------------------------------------------------------------------------
 
+```
 public class BooleanDeserializer extends JsonDeserializer<Boolean> {
 
     @Override
@@ -97,7 +100,7 @@ public class BooleanDeserializer extends JsonDeserializer<Boolean> {
         return value == 1;
     }
 }
-
+```
 These serializer and deserializer will serialize and deserialize boolean values using the integer values
 1 and 0, respectively.
 
@@ -105,6 +108,7 @@ To use these serializer and deserializer globally, you can register them with th
 creating a configuration class and annotating it with the @Configuration and
 @EnableConfigurationProperties annotations. For example:
 
+```
 @Configuration
 @EnableConfigurationProperties
 public class CustomObjectMapperConfiguration {
@@ -119,14 +123,14 @@ public class CustomObjectMapperConfiguration {
         return mapper;
     }
 }
-
+```
 This configuration will create a new ObjectMapper with the custom serializer and deserializer registered,
 and it will be used by the framework to serialize and deserialize JSON data.
 
 It's important to note that this is just one way to customize the way the ObjectMapper handles boolean
 values globally.
 ****************************************************************************************************************
-Q. When some request comes to Controller, Does it go through all the three handler adapter above?
+# Q. When some request comes to Controller, Does it go through all the three handler adapter above?
 
 No, when a request comes to a controller in the Spring MVC framework, it does not go through all of the
 handler adapters mentioned above. Instead, the DispatcherServlet uses the registered handler mappings to
@@ -134,7 +138,7 @@ determine which handler is responsible for handling the request, and then uses t
 adapter to invoke the handler.
 
 For example, consider the following controller:
-
+```
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -148,7 +152,7 @@ public class MyController {
     return "Hello, World!";
   }
 }
-
+```
 In this example, the MyController class is annotated with the @Controller annotation, which indicates
 that it is a controller in the Spring MVC framework. The handleRequest method is annotated with the
 @RequestMapping annotation, which maps it to the /hello URL.
@@ -168,7 +172,7 @@ adapters that are registered with the DispatcherServlet will be used to handle t
 
 ****************************************************************************************************************
 
-Q. How Dispatcher servlet uses registered handler mapping to determine
+# Q. How Dispatcher servlet uses registered handler mapping to determine
 which handler is responsible for handling the request?
 
 In the Spring MVC framework, the DispatcherServlet uses the registered handler mappings to
@@ -177,7 +181,7 @@ through the registered handler mappings and calls the getHandler method on each 
 incoming request. The first handler mapping that returns a non-null value is used to handle the request.
 
 For example, consider the following handler mapping:
-
+```
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -200,7 +204,7 @@ public class MyHandlerMapping implements HandlerMapping {
     return null;
   }
 }
-
+```
 In this example, the MyHandlerMapping class is an implementation of the HandlerMapping interface
 that delegates to the RequestMappingHandlerMapping to get the handler for the incoming request.
 When the DispatcherServlet calls the getHandler method on the MyHandlerMapping, it will pass the
@@ -210,7 +214,7 @@ the MyHandlerMapping will return a ModelAndView object with the handler as its v
 
 To use the MyHandlerMapping in a Spring MVC application, you can register it as a bean in the
 ApplicationContext:
-
+```
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
@@ -223,13 +227,13 @@ public class MyConfiguration extends WebMvcConfigurationSupport {
     return new MyHandlerMapping(delegate);
   }
 }
-
+```
 This will register the MyHandlerMapping as a bean in the ApplicationContext, and the DispatcherServlet will use it to determine which
 handler to use for incoming requests.
 
 ****************************************************************************************************************
 
-Q. So RequestMappingHandlerMapping gives us which adapter to use?
+# Q. So RequestMappingHandlerMapping gives us which adapter to use?
 
 No, the RequestMappingHandlerMapping does not give us which handler adapter to use. Instead,
 it gives us the handler object that is responsible for handling the request. The handler adapter is
@@ -240,7 +244,7 @@ requests to handler objects based on the @RequestMapping annotations on the hand
 have any knowledge of the handler adapters that are registered with the DispatcherServlet.
 
 Here is an example of how the RequestMappingHandlerMapping works:
-
+```
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -254,7 +258,7 @@ public class MyController {
     return "Hello, World!";
   }
 }
-
+```
 In this example, the MyController class is annotated with the @Controller annotation, which indicates
 that it is a controller in the Spring MVC framework. The handleRequest method is annotated with the
 @RequestMapping annotation, which maps it to the /hello URL.

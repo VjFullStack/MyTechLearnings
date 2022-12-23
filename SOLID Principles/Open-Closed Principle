@@ -1,4 +1,4 @@
-Q. Explain Open  close principle in detail in Java?
+# Q. Explain Open  close principle in detail in Java?
 
 The Open/Closed Principle is a software design principle that states that software entities
 (classes, modules, functions, etc.) should be open for extension but closed for modification.
@@ -10,6 +10,7 @@ For example, let's say you have a base class called Shape that has a method call
 You can then create subclasses for specific types of shapes, such as Rectangle and Circle,
 and override the area() method to provide the specific implementation for each shape.
 
+```
 public abstract class Shape {
     public abstract double area();
 }
@@ -41,12 +42,12 @@ public class Circle extends Shape {
         return Math.PI * radius * radius;
     }
 }
-
+```
 Now, if you want to add a new type of shape, such as a triangle, you can simply create a new subclass
 of Shape and provide the implementation for the area() method without changing any of the existing code.
 This allows you to extend the functionality of the system without modifying the existing code,
 which is in line with the Open/Closed Principle.
-
+```
 public class Triangle extends Shape {
     private double base;
     private double height;
@@ -61,10 +62,10 @@ public class Triangle extends Shape {
         return 0.5 * base * height;
     }
 }
-
+```
 ****************************************************************************************************************
 
-Q. What is polymorphism in above example?
+# Q. What is polymorphism in above example?
 
 In the example I provided, polymorphism is demonstrated through the use of inheritance and method
 overriding. Polymorphism refers to the ability of a piece of code to take on multiple forms.
@@ -80,13 +81,13 @@ will be the one provided by the subclass that the object belongs to. This is kno
 dispatch or late binding.
 
 Here's an example of how polymorphism is used in the Shape example:
-
+```
 Shape rectangle = new Rectangle(10, 20);
 Shape circle = new Circle(5);
 
 System.out.println(rectangle.area()); // 200
 System.out.println(circle.area()); // 78.53981633974483
-
+```
 
 In this example, the area() method is called on two objects of type Shape, but the actual method that
 gets executed is the one provided by the subclass that the object belongs to. The rectangle object
@@ -96,7 +97,7 @@ area() method gets executed. This is an example of polymorphism in action.
 
 ****************************************************************************************************************
 
-Q. can you explain Open Closed principle in terms of interfaces in Java
+# Q. can you explain Open Closed principle in terms of interfaces in Java
 
 In Java, the Open/Closed Principle can be applied through the use of interfaces. An interface is
 a type that defines a set of abstract methods that a class must implement. By defining an interface
@@ -104,14 +105,14 @@ and requiring a class to implement it, you can specify the behavior that a class
 specifying the implementation details.
 
 For example, let's say you have an interface called Shape that defines an area() method:
-
+```
 public interface Shape {
     double area();
 }
-
+```
 You can then create classes that implement the Shape interface and provide
 their own implementation for the area() method:
-
+```
 public class Rectangle implements Shape {
     private double width;
     private double height;
@@ -139,12 +140,12 @@ public class Circle implements Shape {
         return Math.PI * radius * radius;
     }
 }
-
+```
 Now, if you want to add a new type of shape, such as a triangle, you can simply create a new class
 that implements the Shape interface and provide the implementation for the area() method.
 This allows you to extend the functionality of the system without modifying the existing code,
 which is in line with the Open/Closed Principle.
-
+```
 public class Triangle implements Shape {
     private double base;
     private double height;
@@ -159,7 +160,7 @@ public class Triangle implements Shape {
         return 0.5 * base * height;
     }
 }
-
+```
 In this example, the Shape interface defines the behavior that each shape must have (i.e., the ability
 to calculate its area), but it does not specify the implementation details. This allows each class
 that implements the Shape interface to provide its own implementation for the area() method, without

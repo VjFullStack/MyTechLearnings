@@ -1,10 +1,11 @@
-Q. Explain Single Responsibility Principle with exampLe in java?
+# Q. Explain Single Responsibility Principle with exampLe in java?
 
 The Single Responsibility Principle (SRP) is a software design principle that states that every class should have a single responsibility, or a single reason to change. In other words, a class should have only one job, and it should do that job well.
 
 Here is an example of a Java class that violates the Single Responsibility Principle:
 --------------------------------------------------------------------------------------
-public class Employee {
+
+```public class Employee {
   private String name;
   private String address;
   private String email;
@@ -57,7 +58,8 @@ public class Employee {
     // code to send email to employee
   }
 }
-----------------------------------------------------------------------------------------------
+```
+
 This Employee class has two responsibilities: storing employee information and saving it to a database,
 and sending emails to employees. A better design would be to split these responsibilities into two
 separate classes, such as an Employee class and an EmailService class. This would make the code
@@ -67,7 +69,7 @@ email sending functionality, and vice versa.
 Here is an example of how the Employee class could be refactored
 to follow the Single Responsibility Principle:
 -----------------------------------------------------------------------------------------------------
-
+```
 public class Employee {
   private String name;
   private String address;
@@ -119,27 +121,26 @@ public class EmailService {
     // code to send email
   }
 }
------------------------------------------------------------------------------------------------------------
+```
+
 Now the Employee class has only one responsibility, which is to store employee information,
 and the EmailService class
 
 *************************************************************************************************************
 
 
-Q. What problems can occur if we violate SRP, can you show me with example?
+# Q. What problems can occur if we violate SRP, can you show me with example?
 
 The Single Responsibility Principle (SRP) is a software design principle that states that a class or
 module should have only one reason to change. In other words, a class or module should have only one
 responsibility or job. Violating the SRP can lead to several problems, including:
 
-1. Increased complexity: If a class or module has multiple responsibilities, it becomes more complex and harder to understand and maintain.
-
-2. Reduced reusability: If a class or module has multiple responsibilities, it may not be easily reusable in other contexts because it is tightly coupled to its specific responsibilities.
-
-3. Decreased maintainability: If a class or module has multiple responsibilities, changes to one responsibility may require changes to other parts of the class or module, which can make it more difficult to maintain.
+- Increased complexity: If a class or module has multiple responsibilities, it becomes more complex and harder to understand and maintain. 
+- Reduced reusability: If a class or module has multiple responsibilities, it may not be easily reusable in other contexts because it is tightly coupled to its specific responsibilities. 
+- Decreased maintainability: If a class or module has multiple responsibilities, changes to one responsibility may require changes to other parts of the class or module, which can make it more difficult to maintain.
 
 Here is an example of a class that violates the SRP:
-
+```
 class Employee
 {
   private String name;
@@ -158,7 +159,7 @@ class Employee
   public double calculatePay() { /* code to calculate employee pay */ }
   public void save() { /* code to save employee to database */ }
 }
-
+```
 
 In this example, the Employee class has three responsibilities: storing employee information, calculating
 employee pay, and saving employee information to a database. This violates the SRP because the class has
@@ -173,10 +174,10 @@ This would make the code more modular and easier to maintain.
 
 *************************************************************************************************************
 
-Q. Show me the example with Single responsibility principle in Java?
+# Q. Show me the example with Single responsibility principle in Java?
 
 example of the Single Responsibility Principle (SRP) in Java:
-
+```
 public class Employee {
   private String name;
   private String address;
@@ -232,7 +233,7 @@ public enum FormatType {
   CSV,
   XML
 }
-
+```
 
 In this example, the Employee class has a single responsibility: to store and provide access to
 information about an employee. The EmployeeReportFormatter class has a single responsibility: to format

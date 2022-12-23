@@ -1,4 +1,4 @@
-Q. I want to learn about Serializable in java
+# Q. I want to learn about Serializable in java
 
 In Java, the Serializable interface is a marker interface that indicates that a class can be serialized
 and deserialized. Serialization is the process of converting an object's state (including its variables and properties) into a byte stream, which can then be stored or transmitted and later restored as an exact copy of the original object. Deserialization is the opposite process, which converts a byte stream back into an object.
@@ -8,7 +8,7 @@ Serializable to the class declaration. The Serializable interface does not conta
 so there is no need to implement any methods when implementing this interface.
 
 Here is an example of a simple serializable class in Java:
-
+```
 import java.io.Serializable;
 
 public class User implements Serializable {
@@ -36,10 +36,10 @@ public class User implements Serializable {
         this.age = age;
     }
 }
-
+```
 To serialize an object of this class, you can use the ObjectOutputStream class from the java.io package,
 like this:
-
+```
 User user = new User("John", 30);
 
 try (FileOutputStream fos = new FileOutputStream("user.ser");
@@ -48,10 +48,10 @@ try (FileOutputStream fos = new FileOutputStream("user.ser");
 } catch (IOException e) {
     e.printStackTrace();
 }
-
+```
 
 To deserialize the object, you can use the ObjectInputStream class, like this:
-
+```
 User user = null;
 
 try (FileInputStream fis = new FileInputStream("user.ser");
@@ -60,7 +60,7 @@ try (FileInputStream fis = new FileInputStream("user.ser");
 } catch (IOException | ClassNotFoundException e) {
     e.printStackTrace();
 }
-
+```
 Note that for a class to be fully serializable, all of its member variables must be serializable
 as well. If a member variable is not serializable, you can either mark it as transient to exclude it
 from the serialization process, or you can implement custom serialization and deserialization for that
@@ -68,7 +68,7 @@ variable.
 
 ****************************************************************************************************************
 
-Q. Do RestTempate uses Serializable?
+# Q. Do RestTempate uses Serializable?
 
 RestTemplate is a class in the Spring Framework that is used to send HTTP requests and receive HTTP
 responses. It is not directly related to the Serializable interface in Java.
@@ -82,11 +82,11 @@ deserialization, but it is not the same thing.
 RestTemplate uses a HttpMessageConverter to convert the request and response bodies between Java
 objects and HTTP messages. By default, RestTemplate supports the following types of message converters:
 
-1. ByteArrayHttpMessageConverter: Converts byte arrays.
-2. StringHttpMessageConverter: Converts strings.
-3. FormHttpMessageConverter: Converts form data to and from a MultiValueMap<String, String>.
-4. Jaxb2RootElementHttpMessageConverter: Converts Java objects to and from XML using JAXB2.
-5. MappingJackson2HttpMessageConverter: Converts Java objects to and from JSON using the Jackson library.
++ ByteArrayHttpMessageConverter: Converts byte arrays. 
++ StringHttpMessageConverter: Converts strings. 
++ FormHttpMessageConverter: Converts form data to and from a MultiValueMap<String, String>. 
++ Jaxb2RootElementHttpMessageConverter: Converts Java objects to and from XML using JAXB2. 
++ MappingJackson2HttpMessageConverter: Converts Java objects to and from JSON using the Jackson library.
 
 So, to answer your question, RestTemplate does not use the Serializable interface directly.
 However, if you are using RestTemplate to consume a REST API that returns serialized Java objects, then those objects might need to implement the Serializable interface in order to be deserialized properly.
@@ -95,7 +95,7 @@ However, if you are using RestTemplate to consume a REST API that returns serial
 
 ****************************************************************************************************************
 
-Are Entity classes Serializable?
+# Q. Are Entity classes Serializable?
 
 Entity classes in Java are typically used to represent persistent data stored in a database.
 They are usually part of an object-relational mapping (ORM) framework, such as Hibernate or
