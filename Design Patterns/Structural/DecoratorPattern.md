@@ -4,12 +4,6 @@ The Decorator pattern is a way to add behavior to an object dynamically, without
 behavior of other objects from the same class. This pattern is commonly used in object-oriented 
 programming to add responsibilities to objects at run time.
 
-In the code example, the Component interface defines the operation method, which will be implemented 
-by concrete components such as ConcreteComponent. The Decorator abstract class implements the Component 
-interface and holds a reference to the Component object. The concrete decorators, such as 
-ConcreteDecoratorA and ConcreteDecoratorB, extend the Decorator class and add their own behavior to the 
-operation method.
-
 A real-life example of the Decorator pattern could be the customization of a coffee order at a café. 
 The Component in this case could be the base coffee, while the Decorators could be the additions such 
 as milk, sugar, and flavor syrups. Each Decorator adds its own behavior, such as changing the flavor or 
