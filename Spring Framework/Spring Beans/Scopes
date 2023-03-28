@@ -1,0 +1,73 @@
+# what is Spring Bean scope "Proxy" is it related to this design pateern
+  
+# Ans : 
+Yes, the Spring Bean scope "proxy" is related to the Proxy design pattern.
+
+In Spring, a bean can be scoped to "prototype", "singleton", "request", "session", "global session", or "proxy". When a bean is scoped as "proxy", Spring creates a proxy object that acts as a stand-in for the real object. The proxy object intercepts calls to the bean and delegates them to the real object as necessary.
+
+The purpose of using a proxy bean in Spring is similar to the purpose of using the Proxy design pattern - to control access to the real object and add additional functionality to it. For example, a proxy bean can be used to add caching, security, or transaction management to a singleton bean.
+
+It's worth noting that Spring uses a dynamic proxy to implement the "proxy" scope, which is different from the static proxy used in the Proxy design pattern. The dynamic proxy is created at runtime based on the interfaces implemented by the bean, while the static proxy is created at compile time and requires the creation of a separate class for each proxied class.
+
+---
+
+# what was the necessity of this bean scope? what purpose it solves. show me with code example?
+
+# Ans : 
+
+The purpose of bean scopes in Spring is to control the lifecycle of the beans and the way they are shared and accessed by other beans in the application.
+
+For example, if a bean is scoped as a "prototype", a new instance of the bean is created every time it is requested by another bean. This can be useful when the bean has state that needs to be unique for each instance, or when the bean is expensive to create and should be created only when needed.
+
+On the other hand, if a bean is scoped as a "singleton", a single instance of the bean is created and shared by all beans that depend on it. This can be useful when the bean has no state or when the state can be shared among all instances.
+
+The "proxy" scope is a special scope in Spring that creates a proxy object that acts as a stand-in for the real object. The proxy object intercepts calls to the bean and delegates them to the real object as necessary. This can be useful when we want to add additional functionality to the bean, such as caching, security, or transaction management.
+
+Here's an example of how to use the "proxy" scope in Spring:
+
+```
+@Component
+@Scope(value = "proxy", proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class MyService {
+    // ...
+}
+```
+
+In this example, the MyService class is annotated with @Component to make it a Spring bean. The @Scope annotation is used to set the scope to "proxy", and the proxyMode parameter is set to TARGET_CLASS, which tells Spring to create a CGLIB proxy object that extends the class of the bean.
+
+Now, when a bean that depends on MyService requests an instance of it from the Spring container, Spring will create a proxy object instead of the real object. The proxy object intercepts all calls to MyService and delegates them to the real object as necessary. We can add additional functionality to the MyService bean by defining an aspect that intercepts the calls to it and adds the desired behavior.
+
+```
+@Aspect
+@Component
+public class MyServiceAspect {
+    
+    @Autowired
+    private MyCache myCache;
+
+    @Around("execution(* com.example.MyService.*(..))")
+    public Object cache(ProceedingJoinPoint joinPoint) throws Throwable {
+        // Check if the result is already cached
+        String key = generateKey(joinPoint.getSignature().toString(), joinPoint.getArgs());
+        Object result = myCache.get(key);
+        if (result != null) {
+            return result;
+        }
+
+        // Invoke the original method and cache the result
+        result = joinPoint.proceed();
+        myCache.put(key, result);
+        return result;
+    }
+
+    private String generateKey(String signature, Object[] args) {
+        // Generate a unique key based on the method signature and arguments
+        // ...
+    }
+}
+
+```
+In this example, we define an aspect that intercepts calls to any method of MyService and checks if the result is already cached. If it is, the aspect returns the cached result. If not, the aspect invokes the original method and caches the result. We can add this aspect to our Spring configuration, and it will automatically be applied to all instances of MyService that are created by the Spring container.
+
+
+
