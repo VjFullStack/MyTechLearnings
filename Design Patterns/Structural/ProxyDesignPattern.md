@@ -213,5 +213,65 @@ When a method is called on the proxy, the doSomething method of the MyServicePro
 Using a proxy for lazy loading can be particularly useful in situations where you have a large number of objects that are not always needed, or where the initialization process is expensive.
 
 ---
+## Q. How to implement access control in java using Proxy design pattern.
 
+## Ans : 
+
+Access control is another use case for the Proxy pattern in Java. With the Proxy pattern, you can implement access control by placing a proxy object between the client and the real object. The proxy object can then control access to the real object by checking permissions and only allowing authorized clients to call certain methods.
+
+Here's an example of how a proxy can be used for access control in Java:
+
+```
+public interface BankAccount {
+    void deposit(double amount);
+    void withdraw(double amount);
+}
+
+public class BankAccountImpl implements BankAccount {
+    private double balance;
+
+    public void deposit(double amount) {
+        balance += amount;
+    }
+
+    public void withdraw(double amount) {
+        balance -= amount;
+    }
+}
+
+public class BankAccountProxy implements BankAccount {
+    private BankAccountImpl realObject;
+    private String userRole;
+
+    public BankAccountProxy(BankAccountImpl realObject, String userRole) {
+        this.realObject = realObject;
+        this.userRole = userRole;
+    }
+
+    public void deposit(double amount) {
+        if (userRole.equals("admin")) {
+            realObject.deposit(amount);
+        } else {
+            throw new SecurityException("Access denied");
+        }
+    }
+
+    public void withdraw(double amount) {
+        if (userRole.equals("admin") || userRole.equals("customer")) {
+            realObject.withdraw(amount);
+        } else {
+            throw new SecurityException("Access denied");
+        }
+    }
+}
+
+```
+
+In this example, we have an interface called BankAccount and a corresponding implementation called BankAccountImpl. We also have a BankAccountProxy class that implements the BankAccount interface and acts as a proxy for the BankAccountImpl object.
+
+The BankAccountProxy constructor takes an instance of BankAccountImpl and a user role as parameters. The deposit and withdraw methods of the BankAccountProxy class check the user role and only allow authorized users to call the corresponding methods on the real object. If the user role is not authorized, a SecurityException is thrown.
+
+This is just a simple example, but it shows how you can use a proxy object to implement access control in Java. With this approach, you can ensure that only authorized users are able to call certain methods on the real object, which can be important in applications that handle sensitive data.
+
+---
 
