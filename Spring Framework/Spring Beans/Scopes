@@ -69,5 +69,65 @@ public class MyServiceAspect {
 ```
 In this example, we define an aspect that intercepts calls to any method of MyService and checks if the result is already cached. If it is, the aspect returns the cached result. If not, the aspect invokes the original method and caches the result. We can add this aspect to our Spring configuration, and it will automatically be applied to all instances of MyService that are created by the Spring container.
 
+---
+
+# Q. so different bean scope is having different level of loading? lazy or early?
+
+# Ans : 
+Yes, different bean scopes in Spring have different levels of loading, which can be either lazy or eager (early) loading.
+
+Eager loading means that the bean is created as soon as the application context is initialized. This means that the bean is immediately available for use by other beans in the application. Beans that are scoped as "singleton" or "proxy" are eager loaded by default.
+
+Lazy loading means that the bean is created only when it is first requested by another bean. This can improve performance and reduce memory usage by avoiding the creation of objects that are not immediately needed. Beans that are scoped as "prototype" are lazy loaded by default, meaning a new instance of the bean is created only when it is requested.
+
+In addition to the default lazy or eager loading behavior for each scope, Spring also provides the option to specify additional lazy or eager loading behavior using the @Lazy and @DependsOn annotations.
+
+The @Lazy annotation can be used to specify that a bean should be lazily loaded even if it has a non-lazy scope, such as "singleton". For example:
+
+```
+@Component
+@Scope(value = "singleton")
+@Lazy
+public class MySingletonBean {
+    // ...
+}
+
+```
+
+In this example, even though the bean is scoped as "singleton", it will be lazily loaded because of the @Lazy annotation.
+
+The @DependsOn annotation can be used to specify that a bean should be eagerly loaded even if it has a lazy scope, such as "prototype". For example:
+
+```
+@Component
+@Scope(value = "prototype")
+@DependsOn("mySingletonBean")
+public class MyPrototypeBean {
+    // ...
+}
+
+```
+
+In this example, even though the bean is scoped as "prototype", it will be eagerly loaded when the application context is initialized because of the @DependsOn annotation, which specifies that it depends on a singleton bean named "mySingletonBean".
+
+---
+
+# Q. what are conflicts in the bean scopes. for example when singleton calls prototype, or prototype calls proxy. 
+
+# Ans: 
+
+In Spring, conflicts can arise when beans with different scopes interact with each other. Here are a few examples of potential conflicts:
+
+* Singleton calling Prototype:
+If a singleton bean calls a prototype bean, Spring will create a new instance of the prototype bean for each call. This can cause problems if the prototype bean has state that needs to be maintained across multiple calls. In this case, it might be better to inject a prototype bean factory into the singleton bean and use it to create new instances of the prototype bean as needed.
+
+* Prototype calling Singleton:
+If a prototype bean calls a singleton bean, it may get a reference to a stale or inconsistent version of the singleton bean if the singleton bean is modified during the lifecycle of the application. In this case, it may be better to use method injection or a scoped proxy to ensure that the prototype bean always gets a fresh reference to the singleton bean.
+
+* Prototype calling Proxy:
+If a prototype bean calls a proxy bean, the proxy bean will always return the same instance of the target bean for each call. This can cause problems if the prototype bean requires a new instance of the target bean for each call. In this case, it may be better to use method injection or a scoped proxy to ensure that the prototype bean always gets a fresh instance of the target bean.
+
+In general, it's important to carefully consider the interactions between beans with different scopes in your Spring application to avoid conflicts and ensure that the application behaves as expected.
+
 
 
