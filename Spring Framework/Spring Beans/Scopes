@@ -121,13 +121,120 @@ In Spring, conflicts can arise when beans with different scopes interact with ea
 * Singleton calling Prototype:
 If a singleton bean calls a prototype bean, Spring will create a new instance of the prototype bean for each call. This can cause problems if the prototype bean has state that needs to be maintained across multiple calls. In this case, it might be better to inject a prototype bean factory into the singleton bean and use it to create new instances of the prototype bean as needed.
 
+Let's say we have a UserRepository prototype bean that needs to be injected into a UserService singleton bean. If we simply inject the prototype bean into the singleton bean, the same instance of the UserRepository bean will be used for every call to UserService. This can cause problems if UserRepository has state that needs to be maintained across multiple calls.
+
+One solution is to inject a UserRepository prototype bean factory into UserService and use it to create new instances of UserRepository as needed. Here's an example:
+
+```
+@Component
+@Scope("prototype")
+public class UserRepository {
+    // ...
+}
+
+@Service
+public class UserService {
+    private final Provider<UserRepository> userRepositoryProvider;
+
+    @Autowired
+    public UserService(Provider<UserRepository> userRepositoryProvider) {
+        this.userRepositoryProvider = userRepositoryProvider;
+    }
+
+    public void doSomething() {
+        UserRepository userRepository = userRepositoryProvider.get();
+        // use userRepository as needed
+    }
+}
+
+```
+In this example, we've injected a Provider<UserRepository> instead of a UserRepository instance into UserService. The Provider is a Spring-provided interface that can be used to lazily create prototype beans. When UserService needs a new UserRepository instance, it calls userRepositoryProvider.get(), which returns a new instance of UserRepository.
+
+
+
 * Prototype calling Singleton:
 If a prototype bean calls a singleton bean, it may get a reference to a stale or inconsistent version of the singleton bean if the singleton bean is modified during the lifecycle of the application. In this case, it may be better to use method injection or a scoped proxy to ensure that the prototype bean always gets a fresh reference to the singleton bean.
+
+Let's say we have a UserCache singleton bean that needs to be injected into a UserRepository prototype bean. If we simply inject the UserCache into UserRepository, we run the risk of getting a stale or inconsistent version of UserCache if it is modified during the lifecycle of the application.
+
+One solution is to use method injection to ensure that UserRepository always gets a fresh reference to UserCache. Here's an example:
+
+```
+@Component
+@Scope("prototype")
+public class UserRepository {
+    private UserCache userCache;
+
+    public void setUserCache(UserCache userCache) {
+        this.userCache = userCache;
+    }
+
+    // ...
+}
+
+@Component
+@Scope("singleton")
+public class UserCache {
+    // ...
+}
+
+@Service
+public class UserService {
+    private final UserRepository userRepository;
+    private final UserCache userCache;
+
+    @Autowired
+    public UserService(UserRepository userRepository, UserCache userCache) {
+        this.userRepository = userRepository;
+        this.userCache = userCache;
+    }
+
+    public void doSomething() {
+        userRepository.setUserCache(userCache);
+        // use userRepository as needed
+    }
+}
+
+```
+In this example, we've injected both UserRepository and UserCache into UserService. We then use method injection to set the UserCache instance on UserRepository before each call to UserRepository. This ensures that UserRepository always gets a fresh reference to UserCache.
+
+
+
 
 * Prototype calling Proxy:
 If a prototype bean calls a proxy bean, the proxy bean will always return the same instance of the target bean for each call. This can cause problems if the prototype bean requires a new instance of the target bean for each call. In this case, it may be better to use method injection or a scoped proxy to ensure that the prototype bean always gets a fresh instance of the target bean.
 
 In general, it's important to carefully consider the interactions between beans with different scopes in your Spring application to avoid conflicts and ensure that the application behaves as expected.
+
+Let's say we have a UserRepository prototype bean that needs to be injected into a UserService proxy bean. If we simply inject the UserRepository into UserService, the same instance of UserRepository will be used for every call to UserService.
+
+One solution is to use a scoped proxy to ensure that UserService always gets a fresh instance of UserRepository. Here's an example:
+
+```
+@Component
+@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
+public class UserRepository {
+    // ...
+}
+
+@Service
+public class UserService {
+    private final UserRepository userRepository;
+
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void doSomething() {
+        // use userRepository as needed
+    }
+}
+
+```
+
+In this example, we've added the proxyMode attribute to the @Scope annotation on UserRepository. This tells Spring to create a scoped proxy for UserRepository instead of a regular prototype instance. The proxy will intercept calls to UserRepository and create a new instance for each call, ensuring that UserService always gets a fresh instance of UserRepository. We then inject the UserRepository proxy bean into UserService as usual.
+
 
 
 
